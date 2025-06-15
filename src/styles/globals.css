@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 33, 33, 33;
+  --background-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+@layer components {
+  .parking-button {
+    @apply relative flex flex-col items-center justify-center rounded-full shadow-lg transition-all duration-300 ease-in-out;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.8);
+  }
+  
+  .parking-button:active {
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+  }
+  
+  .b1-floor {
+    @apply bg-b1-green;
+  }
+  
+  .b2-floor {
+    @apply bg-b2-pink;
+  }
+  
+  .glass-effect {
+    @apply bg-opacity-80 backdrop-blur-sm;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+}
