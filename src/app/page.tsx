@@ -5,7 +5,7 @@ import Image from 'next/image';
 import ParkingInputModal from '@/components/ParkingInputModal';
 import ParkingRecordList from '@/components/ParkingRecordList';
 import { FloorType, ParkingRecord, CarType } from '@/utils/types';
-import { fetchRecords, addRecordToDB, deleteRecordFromDB } from '@/utils/parkingApi';
+import { fetchRecords, fetchRecordsByCarType, addRecordToDB, deleteRecordFromDB } from '@/utils/parkingApi';
 import { getUserId } from '@/utils/user';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,7 +20,9 @@ export default function Home() {
   
   // G80과 G90 차량의 최신 주차 기록을 찾는 함수
   const findLatestCarRecord = (carType: CarType): ParkingRecord | undefined => {
-    return records.find(record => record.car === carType);
+    // 해당 차량 타입의 기록만 찾아서 가장 최신 기록 반환
+    const carRecords = records.filter(record => record.car === carType);
+    return carRecords.length > 0 ? carRecords[0] : undefined;
   };
   
   // G80 테두리 색상 결정 함수
@@ -142,9 +144,20 @@ export default function Home() {
     setLoading(true);
     try {
       await addRecordToDB(newRecord);
+      
+      // 전체 기록 갱신
       const updated = await fetchRecords('');
       setRecords(updated);
-      setCurrentRecord(updated[0]);
+      
+      // 현재 기록 업데이트
+      const carRecords = await fetchRecordsByCarType(car);
+      setCurrentRecord(carRecords[0] || {
+        id: 'default',
+        floor: 'B1',
+        number: '00',
+        created_at: new Date().toISOString(),
+        car
+      });
     } catch {
       setError('기록 저장에 실패했습니다.');
     } finally {
@@ -155,16 +168,37 @@ export default function Home() {
   // 기록 삭제
   const handleDeleteRecord = async (id: string) => {
     setDeleteLoadingId(id);
+    
+    // 삭제할 기록의 차량 타입 확인
+    const recordToDelete = records.find(r => r.id === id);
+    const carType = recordToDelete?.car;
+    
     try {
       await deleteRecordFromDB(id); // userId 삭제 - 로컬 스토리지에서는 필요없음
+      
+      // 전체 기록 갱신
       const updated = await fetchRecords('');
       setRecords(updated);
-      setCurrentRecord(updated[0] || {
-        id: 'default',
-        floor: 'B1',
-        number: '00',
-        created_at: new Date().toISOString(),
-      });
+      
+      // 해당 차량 타입의 기록만 갱신
+      if (carType) {
+        const carRecords = await fetchRecordsByCarType(carType);
+        setCurrentRecord(carRecords[0] || {
+          id: 'default',
+          floor: 'B1',
+          number: '00',
+          created_at: new Date().toISOString(),
+          car: carType
+        });
+      } else {
+        // 차량 타입을 알 수 없는 경우 처리
+        setCurrentRecord(updated[0] || {
+          id: 'default',
+          floor: 'B1',
+          number: '00',
+          created_at: new Date().toISOString(),
+        });
+      }
     } catch {
       setError('기록 삭제에 실패했습니다.');
     } finally {
