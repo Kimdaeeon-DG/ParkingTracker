@@ -33,9 +33,11 @@ const ParkingRecordList: React.FC<ParkingRecordListProps> = ({ records, onDelete
             />
             <div className="flex-1">
               <div className="flex justify-between items-center">
-                <span className="font-medium">
-                  {record.floor === 'B1' ? '🟢 1층' : '🌸 2층'} | {record.number}번
-                </span>
+                <div>
+                  <span className="font-medium">
+                    {record.car} | {record.floor === 'B1' ? '🟢 1층' : '🌸 2층'} | {record.number}번
+                  </span>
+                </div>
                 <span className="text-sm text-gray-500">
                   {formatDate(record.created_at)}
                 </span>
