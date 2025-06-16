@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
-import { FloorType } from '@/utils/types';
+import { FloorType, CarType } from '@/utils/types';
+import CarSelector from './CarSelector';
 
 interface ParkingInputModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (floor: FloorType, number: string) => void;
+  onSave: (floor: FloorType, number: string, car: CarType) => void;
   initialFloor?: FloorType;
+  initialCar?: CarType;
 }
 
 const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  initialFloor = 'B1'
+  initialFloor = 'B1',
+  initialCar = 'G80'
 }) => {
   const [floor, setFloor] = useState<FloorType>(initialFloor);
   const [number, setNumber] = useState<string>('');
+  const [car, setCar] = useState<CarType>(initialCar);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
     if (number) {
-      onSave(floor, number);
+      onSave(floor, number, car);
       setNumber('');
       onClose();
     }
@@ -45,6 +49,9 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="glass-effect w-11/12 max-w-md p-6 rounded-2xl">
         <h2 className="mb-4 text-xl font-bold text-center">주차 위치 입력</h2>
+        
+        {/* 차량 선택 */}
+        <CarSelector selectedCar={car} onSelectCar={setCar} />
         
         {/* 층수 선택 */}
         <div className="flex justify-center gap-4 mb-6">

@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import ParkingButton from '@/components/ParkingButton';
 import ParkingInputModal from '@/components/ParkingInputModal';
 import ParkingRecordList from '@/components/ParkingRecordList';
-import { FloorType, ParkingRecord } from '@/utils/types';
+import CarSelector from '@/components/CarSelector';
+import { FloorType, ParkingRecord, CarType } from '@/utils/types';
 import { fetchRecords, addRecordToDB, deleteRecordFromDB } from '@/utils/parkingApi';
 import { getUserId } from '@/utils/user';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function Home() {
   const [records, setRecords] = useState<ParkingRecord[]>([]);
   const [currentRecord, setCurrentRecord] = useState<ParkingRecord | null>(null);
+  const [selectedCar, setSelectedCar] = useState<CarType>('G80');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,11 +44,12 @@ export default function Home() {
   const handleCloseModal = () => setIsModalOpen(false);
 
   // 기록 저장
-  const handleSaveRecord = async (floor: FloorType, number: string) => {
+  const handleSaveRecord = async (floor: FloorType, number: string, car: CarType) => {
     const newRecord = {
       id: uuidv4(),
       floor,
       number,
+      car,
       user_id: userId,
     };
     setLoading(true);
@@ -84,13 +87,20 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <h1 className="mb-8 text-2xl font-bold">🚗 우리집 주차 위치</h1>
+      <h1 className="mb-6 text-2xl font-bold">🚗 우리집 주차 위치</h1>
+      
+      {/* 차량 선택 버튼 */}
+      <div className="flex justify-center mb-4">
+        <CarSelector selectedCar={selectedCar} onSelectCar={setSelectedCar} />
+      </div>
+      
       {/* 주차 위치 표시 버튼 */}
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-6">
         {currentRecord && (
           <ParkingButton
             floor={currentRecord.floor}
             number={currentRecord.number}
+            car={currentRecord.car}
             onClick={handleOpenModal}
           />
         )}
@@ -106,6 +116,7 @@ export default function Home() {
         onClose={handleCloseModal}
         onSave={handleSaveRecord}
         initialFloor={currentRecord?.floor}
+        initialCar={selectedCar}
       />
     </div>
   );

@@ -36,4 +36,22 @@ body {
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
+  
+  .car-selector {
+    @apply relative flex flex-col items-center justify-center rounded-xl shadow-md transition-all duration-200;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8);
+  }
+  
+  .car-selected {
+    @apply bg-blue-100 border-2 border-blue-400;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05), inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+  }
+  
+  .car-unselected {
+    @apply bg-gray-50 border-2 border-transparent;
+  }
+  
+  .car-unselected:hover {
+    @apply bg-gray-100;
+  }
 }
