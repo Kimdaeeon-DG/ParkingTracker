@@ -106,12 +106,11 @@ export default function Home() {
 
   const userId = typeof window !== 'undefined' ? getUserId() : '';
 
-  // Supabase에서 기록 불러오기
+  // 로컬 스토리지에서 기록 불러오기
   useEffect(() => {
-    if (!userId) return;
     setLoading(true);
     setError(null);
-    fetchRecords(userId)
+    fetchRecords('')  // userId는 로컬 스토리지에서 사용하지 않으므로 빈 문자열 전달
       .then((fetched) => {
         setRecords(fetched);
         setCurrentRecord(fetched[0] || {
@@ -123,7 +122,7 @@ export default function Home() {
       })
       .catch((e) => setError('기록을 불러오지 못했습니다.'))
       .finally(() => setLoading(false));
-  }, [userId]);
+  }, []);  // userId 의존성 제거
 
   const handleOpenModal = (car?: CarType) => {
     if (car) setSelectedCar(car);
@@ -138,12 +137,12 @@ export default function Home() {
       floor,
       number,
       car,
-      user_id: userId,
+      // user_id 삭제 - 로컬 스토리지에서는 필요없음
     };
     setLoading(true);
     try {
       await addRecordToDB(newRecord);
-      const updated = await fetchRecords(userId);
+      const updated = await fetchRecords('');
       setRecords(updated);
       setCurrentRecord(updated[0]);
     } catch {
@@ -157,8 +156,8 @@ export default function Home() {
   const handleDeleteRecord = async (id: string) => {
     setDeleteLoadingId(id);
     try {
-      await deleteRecordFromDB(id, userId);
-      const updated = await fetchRecords(userId);
+      await deleteRecordFromDB(id); // userId 삭제 - 로컬 스토리지에서는 필요없음
+      const updated = await fetchRecords('');
       setRecords(updated);
       setCurrentRecord(updated[0] || {
         id: 'default',
@@ -175,7 +174,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <h1 className="mb-6 text-2xl font-bold">아바차 주차 위치</h1>
+      <h1 className="mb-6 text-2xl font-bold">아빠차 주차 위치</h1>
       
       {/* 차량 선택 버튼 */}
       <div className="flex justify-center gap-6 mb-6 w-full max-w-3xl px-4">
