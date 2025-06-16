@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FloorType, CarType } from '@/utils/types';
-import CarSelector from './CarSelector';
+import Image from 'next/image';
 
 interface ParkingInputModalProps {
   isOpen: boolean;
@@ -51,18 +51,50 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
         <h2 className="mb-4 text-xl font-bold text-center">주차 위치 입력</h2>
         
         {/* 차량 선택 */}
-        <CarSelector selectedCar={car} onSelectCar={setCar} />
+        <div className="flex justify-center gap-4 mb-6 w-full">
+          <button
+            className={`car-selector ${car === 'G80' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-3 rounded-xl w-5/12 aspect-[4/3] transition-all border-2 shadow-md`}
+            onClick={() => setCar('G80')}
+          >
+            <div className="car-image-container relative w-full h-16 mb-1">
+              <Image 
+                src="/images/G80.png" 
+                alt="G80" 
+                fill 
+                style={{ objectFit: 'contain' }} 
+                priority
+              />
+            </div>
+            <span className="font-bold text-lg">G80</span>
+          </button>
+          
+          <button
+            className={`car-selector ${car === 'G90' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-3 rounded-xl w-5/12 aspect-[4/3] transition-all border-2 shadow-md`}
+            onClick={() => setCar('G90')}
+          >
+            <div className="car-image-container relative w-full h-16 mb-1">
+              <Image 
+                src="/images/G90.png" 
+                alt="G90" 
+                fill 
+                style={{ objectFit: 'contain' }} 
+                priority
+              />
+            </div>
+            <span className="font-bold text-lg">G90</span>
+          </button>
+        </div>
         
         {/* 층수 선택 */}
         <div className="flex justify-center gap-4 mb-6">
           <button
-            className={`px-4 py-2 rounded-full ${floor === 'B1' ? 'bg-b1-green' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded-lg ${floor === 'B1' ? 'bg-b1-green' : 'bg-gray-200'}`}
             onClick={() => setFloor('B1')}
           >
             🟢 지하 1층
           </button>
           <button
-            className={`px-4 py-2 rounded-full ${floor === 'B2' ? 'bg-b2-pink' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded-lg ${floor === 'B2' ? 'bg-b2-pink' : 'bg-gray-200'}`}
             onClick={() => setFloor('B2')}
           >
             🌸 지하 2층

@@ -38,20 +38,32 @@ body {
   }
   
   .car-selector {
-    @apply relative flex flex-col items-center justify-center rounded-xl shadow-md transition-all duration-200;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8);
+    @apply relative flex flex-col items-center justify-center rounded-xl shadow-lg transition-all duration-200;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.8);
   }
   
   .car-selected {
-    @apply bg-blue-100 border-2 border-blue-400;
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05), inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+    @apply bg-blue-100 border-2 border-blue-500;
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.05), inset -3px -3px 6px rgba(255, 255, 255, 0.5);
+    transform: scale(1.03);
   }
   
   .car-unselected {
-    @apply bg-gray-50 border-2 border-transparent;
+    @apply bg-gray-50 border-2 border-gray-200;
   }
   
   .car-unselected:hover {
     @apply bg-gray-100;
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.8);
+  }
+  
+  .car-image-container {
+    @apply flex items-center justify-center;
+    transition: transform 0.2s ease;
+  }
+  
+  .car-selector:active .car-image-container {
+    transform: scale(0.95);
   }
 }

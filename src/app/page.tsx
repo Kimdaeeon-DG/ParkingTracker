@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ParkingButton from '@/components/ParkingButton';
+import Image from 'next/image';
 import ParkingInputModal from '@/components/ParkingInputModal';
 import ParkingRecordList from '@/components/ParkingRecordList';
-import CarSelector from '@/components/CarSelector';
 import { FloorType, ParkingRecord, CarType } from '@/utils/types';
 import { fetchRecords, addRecordToDB, deleteRecordFromDB } from '@/utils/parkingApi';
 import { getUserId } from '@/utils/user';
@@ -40,7 +39,10 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, [userId]);
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = (car?: CarType) => {
+    if (car) setSelectedCar(car);
+    setIsModalOpen(true);
+  };
   const handleCloseModal = () => setIsModalOpen(false);
 
   // 기록 저장
@@ -90,19 +92,57 @@ export default function Home() {
       <h1 className="mb-6 text-2xl font-bold">🚗 우리집 주차 위치</h1>
       
       {/* 차량 선택 버튼 */}
-      <div className="flex justify-center mb-4">
-        <CarSelector selectedCar={selectedCar} onSelectCar={setSelectedCar} />
+      <div className="flex justify-center gap-4 mb-6 w-full">
+        <button
+          className={`car-selector ${selectedCar === 'G80' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-5 rounded-xl w-5/12 max-w-[200px] aspect-[4/3] transition-all border-2 shadow-md`}
+          onClick={() => {
+            setSelectedCar('G80');
+            handleOpenModal('G80');
+          }}
+        >
+          <div className="car-image-container relative w-full h-28 mb-2">
+            <Image 
+              src="/images/G80.png" 
+              alt="G80" 
+              fill 
+              style={{ objectFit: 'contain' }} 
+              priority
+            />
+          </div>
+          <span className="font-bold text-2xl">G80</span>
+        </button>
+        
+        <button
+          className={`car-selector ${selectedCar === 'G90' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-5 rounded-xl w-5/12 max-w-[200px] aspect-[4/3] transition-all border-2 shadow-md`}
+          onClick={() => {
+            setSelectedCar('G90');
+            handleOpenModal('G90');
+          }}
+        >
+          <div className="car-image-container relative w-full h-28 mb-2">
+            <Image 
+              src="/images/G90.png" 
+              alt="G90" 
+              fill 
+              style={{ objectFit: 'contain' }} 
+              priority
+            />
+          </div>
+          <span className="font-bold text-2xl">G90</span>
+        </button>
       </div>
       
-      {/* 주차 위치 표시 버튼 */}
-      <div className="flex justify-center mb-6">
-        {currentRecord && (
-          <ParkingButton
-            floor={currentRecord.floor}
-            number={currentRecord.number}
-            car={currentRecord.car}
-            onClick={handleOpenModal}
-          />
+      {/* 최근 주차 위치 표시 */}
+      <div className="flex justify-center mb-6 w-full">
+        {currentRecord && currentRecord.car && (
+          <div className="text-center p-3 bg-gray-50 rounded-lg shadow-sm w-11/12 max-w-md">
+            <p className="text-sm text-gray-500 mb-1">
+              {currentRecord.car === 'G80' ? 'G80' : 'G90'} 최근 주차 위치
+            </p>
+            <p className="text-xl font-bold">
+              {currentRecord.floor === 'B1' ? '🟢 지하 1층' : '🌸 지하 2층'} {currentRecord.number}번
+            </p>
+          </div>
         )}
       </div>
       {/* 에러/로딩 안내 */}
