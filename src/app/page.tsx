@@ -17,6 +17,92 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleteLoadingId, setDeleteLoadingId] = useState<string | null>(null);
+  
+  // G80과 G90 차량의 최신 주차 기록을 찾는 함수
+  const findLatestCarRecord = (carType: CarType): ParkingRecord | undefined => {
+    return records.find(record => record.car === carType);
+  };
+  
+  // G80 테두리 색상 결정 함수
+  const getG80BorderColor = (): string => {
+    const g80Record = findLatestCarRecord('G80');
+    if (!g80Record) return 'border-gray-300';
+    
+    return g80Record.floor === 'B1' 
+      ? 'border-8 border-green-500' 
+      : 'border-8 border-pink-500';
+  };
+  
+  // G90 테두리 색상 결정 함수
+  const getG90BorderColor = (): string => {
+    const g90Record = findLatestCarRecord('G90');
+    if (!g90Record) return 'border-gray-300';
+    
+    return g90Record.floor === 'B1' 
+      ? 'border-8 border-green-500' 
+      : 'border-8 border-pink-500';
+  };
+  
+  // G80 층수 텍스트 가져오기
+  const getG80FloorText = (): string => {
+    const g80Record = findLatestCarRecord('G80');
+    if (!g80Record) return '위치 정보 없음';
+    
+    return g80Record.floor === 'B1' ? '지하 1층' : '지하 2층';
+  };
+  
+  // G80 번호 가져오기
+  const getG80Number = (): string => {
+    const g80Record = findLatestCarRecord('G80');
+    if (!g80Record) return '';
+    
+    return `${g80Record.number}`;
+  };
+  
+  // G90 층수 텍스트 가져오기
+  const getG90FloorText = (): string => {
+    const g90Record = findLatestCarRecord('G90');
+    if (!g90Record) return '위치 정보 없음';
+    
+    return g90Record.floor === 'B1' ? '지하 1층' : '지하 2층';
+  };
+  
+  // G90 번호 가져오기
+  const getG90Number = (): string => {
+    const g90Record = findLatestCarRecord('G90');
+    if (!g90Record) return '';
+    
+    return `${g90Record.number}`;
+  };
+  
+  // 이전 함수들 - 호환성을 위해 유지
+  const getG80Location = () => {
+    const g80Record = findLatestCarRecord('G80');
+    if (!g80Record) return <div className="text-center mt-2 text-gray-500">위치 정보 없음</div>;
+    
+    return (
+      <div className="text-center mt-2">
+        <p className="font-bold text-xl">
+          {g80Record.floor === 'B1' ? '지하 1층' : '지하 2층'}
+        </p>
+        <p className="text-3xl font-black">{g80Record.number}번</p>
+      </div>
+    );
+  };
+  
+  const getG90Location = () => {
+    const g90Record = findLatestCarRecord('G90');
+    if (!g90Record) return <div className="text-center mt-2 text-gray-500">위치 정보 없음</div>;
+    
+    return (
+      <div className="text-center mt-2">
+        <p className="font-bold text-xl">
+          {g90Record.floor === 'B1' ? '지하 1층' : '지하 2층'}
+        </p>
+        <p className="text-3xl font-black">{g90Record.number}번</p>
+      </div>
+    );
+  };
 
   const userId = typeof window !== 'undefined' ? getUserId() : '';
 
@@ -89,61 +175,75 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <h1 className="mb-6 text-2xl font-bold">🚗 우리집 주차 위치</h1>
+      <h1 className="mb-6 text-2xl font-bold">아바차 주차 위치</h1>
       
       {/* 차량 선택 버튼 */}
-      <div className="flex justify-center gap-4 mb-6 w-full">
-        <button
-          className={`car-selector ${selectedCar === 'G80' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-5 rounded-xl w-5/12 max-w-[200px] aspect-[4/3] transition-all border-2 shadow-md`}
-          onClick={() => {
-            setSelectedCar('G80');
-            handleOpenModal('G80');
-          }}
-        >
-          <div className="car-image-container relative w-full h-28 mb-2">
-            <Image 
-              src="/images/G80.png" 
-              alt="G80" 
-              fill 
-              style={{ objectFit: 'contain' }} 
-              priority
-            />
-          </div>
-          <span className="font-bold text-2xl">G80</span>
-        </button>
+      <div className="flex justify-center gap-6 mb-6 w-full max-w-3xl px-4">
+        {/* G90 차량 버튼 */}
+        <div className="flex flex-col items-center w-1/2">
+          <button
+            className={`w-full ${getG90BorderColor()} rounded-lg overflow-hidden shadow-lg`}
+            onClick={() => {
+              setSelectedCar('G90');
+              handleOpenModal('G90');
+            }}
+          >
+            <div className="bg-white p-2 text-center border-b">
+              <span className="font-bold text-2xl">G90</span>
+            </div>
+            <div className="relative w-full aspect-[4/3] bg-white p-2">
+              <Image 
+                src="/images/G90.png" 
+                alt="G90" 
+                fill 
+                style={{ objectFit: 'contain' }} 
+                priority
+              />
+            </div>
+            {/* G90 위치 표시 - 버튼 내부에 포함 */}
+            <div className="p-3 text-center bg-gray-50">
+              <p className="font-bold text-xl">
+                {getG90FloorText()}
+              </p>
+              <p className="text-5xl font-black">
+                {getG90Number()}
+              </p>
+            </div>
+          </button>
+        </div>
         
-        <button
-          className={`car-selector ${selectedCar === 'G90' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-5 rounded-xl w-5/12 max-w-[200px] aspect-[4/3] transition-all border-2 shadow-md`}
-          onClick={() => {
-            setSelectedCar('G90');
-            handleOpenModal('G90');
-          }}
-        >
-          <div className="car-image-container relative w-full h-28 mb-2">
-            <Image 
-              src="/images/G90.png" 
-              alt="G90" 
-              fill 
-              style={{ objectFit: 'contain' }} 
-              priority
-            />
-          </div>
-          <span className="font-bold text-2xl">G90</span>
-        </button>
-      </div>
-      
-      {/* 최근 주차 위치 표시 */}
-      <div className="flex justify-center mb-6 w-full">
-        {currentRecord && currentRecord.car && (
-          <div className="text-center p-3 bg-gray-50 rounded-lg shadow-sm w-11/12 max-w-md">
-            <p className="text-sm text-gray-500 mb-1">
-              {currentRecord.car === 'G80' ? 'G80' : 'G90'} 최근 주차 위치
-            </p>
-            <p className="text-xl font-bold">
-              {currentRecord.floor === 'B1' ? '🟢 지하 1층' : '🌸 지하 2층'} {currentRecord.number}번
-            </p>
-          </div>
-        )}
+        {/* G80 차량 버튼 */}
+        <div className="flex flex-col items-center w-1/2">
+          <button
+            className={`w-full ${getG80BorderColor()} rounded-lg overflow-hidden shadow-lg`}
+            onClick={() => {
+              setSelectedCar('G80');
+              handleOpenModal('G80');
+            }}
+          >
+            <div className="bg-white p-2 text-center border-b">
+              <span className="font-bold text-2xl">G80</span>
+            </div>
+            <div className="relative w-full aspect-[4/3] bg-white p-2">
+              <Image 
+                src="/images/G80.png" 
+                alt="G80" 
+                fill 
+                style={{ objectFit: 'contain' }} 
+                priority
+              />
+            </div>
+            {/* G80 위치 표시 - 버튼 내부에 포함 */}
+            <div className="p-3 text-center bg-gray-50">
+              <p className="font-bold text-xl">
+                {getG80FloorText()}
+              </p>
+              <p className="text-5xl font-black">
+                {getG80Number()}
+              </p>
+            </div>
+          </button>
+        </div>
       </div>
       {/* 에러/로딩 안내 */}
       {error && <div className="mb-4 text-red-500">{error}</div>}

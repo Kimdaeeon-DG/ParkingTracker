@@ -19,7 +19,8 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
 }) => {
   const [floor, setFloor] = useState<FloorType>(initialFloor);
   const [number, setNumber] = useState<string>('');
-  const [car, setCar] = useState<CarType>(initialCar);
+  // 차량 선택 부분 제거, 초기 선택된 차량만 사용
+  const car = initialCar;
 
   if (!isOpen) return null;
 
@@ -48,41 +49,22 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="glass-effect w-11/12 max-w-md p-6 rounded-2xl">
-        <h2 className="mb-4 text-xl font-bold text-center">주차 위치 입력</h2>
+        <h2 className="mb-4 text-xl font-bold text-center">{car} 주차 위치 입력</h2>
         
-        {/* 차량 선택 */}
-        <div className="flex justify-center gap-4 mb-6 w-full">
-          <button
-            className={`car-selector ${car === 'G80' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-3 rounded-xl w-5/12 aspect-[4/3] transition-all border-2 shadow-md`}
-            onClick={() => setCar('G80')}
-          >
+        {/* 차량 표시 - 선택 기능 제거하고 단순 표시만 */}
+        <div className="flex justify-center mb-6 w-full">
+          <div className="flex flex-col items-center justify-center p-3 rounded-xl w-5/12 aspect-[4/3] bg-blue-100 border-blue-500 border-2 shadow-md">
             <div className="car-image-container relative w-full h-16 mb-1">
               <Image 
-                src="/images/G80.png" 
-                alt="G80" 
+                src={`/images/${car}.png`}
+                alt={car} 
                 fill 
                 style={{ objectFit: 'contain' }} 
                 priority
               />
             </div>
-            <span className="font-bold text-lg">G80</span>
-          </button>
-          
-          <button
-            className={`car-selector ${car === 'G90' ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-300'} flex flex-col items-center justify-center p-3 rounded-xl w-5/12 aspect-[4/3] transition-all border-2 shadow-md`}
-            onClick={() => setCar('G90')}
-          >
-            <div className="car-image-container relative w-full h-16 mb-1">
-              <Image 
-                src="/images/G90.png" 
-                alt="G90" 
-                fill 
-                style={{ objectFit: 'contain' }} 
-                priority
-              />
-            </div>
-            <span className="font-bold text-lg">G90</span>
-          </button>
+            <span className="font-bold text-lg">{car}</span>
+          </div>
         </div>
         
         {/* 층수 선택 */}
