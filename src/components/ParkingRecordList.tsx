@@ -28,14 +28,20 @@ const ParkingRecordList: React.FC<ParkingRecordListProps> = ({ records, onDelete
           >
             <div 
               className={`w-2 h-10 mr-3 rounded-full ${
-                record.floor === 'B1' ? 'bg-b1-green' : 'bg-b2-pink'
+                record.floor === 'Y' || record.floor === 'G' 
+                  ? 'bg-green-500' 
+                  : 'bg-pink-500'
               }`}
             />
             <div className="flex-1">
               <div className="flex justify-between items-center">
                 <div>
                   <span className="font-medium">
-                    {record.car} | {record.floor === 'B1' ? '🟢 1층' : '🌸 2층'} | {record.number}번
+                    {record.car} | {
+                      (record.floor === 'Y' || record.floor === 'G') 
+                        ? '지하 1층' 
+                        : '지하 2층'
+                    } | {record.floor}{record.number}
                   </span>
                 </div>
                 <span className="text-sm text-gray-500">

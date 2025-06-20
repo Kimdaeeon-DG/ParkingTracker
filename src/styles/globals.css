@@ -23,12 +23,21 @@ body {
     box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
   }
   
-  .b1-floor {
-    @apply bg-b1-green;
+  /* 층 코드별 스타일 */
+  .floor-y {
+    @apply bg-yellow-300;
   }
   
-  .b2-floor {
-    @apply bg-b2-pink;
+  .floor-g {
+    @apply bg-green-300;
+  }
+  
+  .floor-v {
+    @apply bg-violet-300;
+  }
+  
+  .floor-p {
+    @apply bg-pink-300;
   }
   
   .glass-effect {
