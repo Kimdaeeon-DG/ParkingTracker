@@ -1,4 +1,4 @@
-export type FloorType = 'B1' | 'B2';
+export type FloorType = 'Y' | 'G' | 'V' | 'P';
 export type CarType = 'G80' | 'G90';
 
 export interface ParkingRecord {

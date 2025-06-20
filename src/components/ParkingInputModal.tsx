@@ -14,7 +14,7 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  initialFloor = 'B1',
+  initialFloor = 'G',
   initialCar = 'G80'
 }) => {
   const [floor, setFloor] = useState<FloorType>(initialFloor);
@@ -67,20 +67,41 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
           </div>
         </div>
         
-        {/* 층수 선택 */}
-        <div className="flex justify-center gap-4 mb-6">
-          <button
-            className={`px-4 py-2 rounded-lg ${floor === 'B1' ? 'bg-b1-green' : 'bg-gray-200'}`}
-            onClick={() => setFloor('B1')}
-          >
-            🟢 지하 1층
-          </button>
-          <button
-            className={`px-4 py-2 rounded-lg ${floor === 'B2' ? 'bg-b2-pink' : 'bg-gray-200'}`}
-            onClick={() => setFloor('B2')}
-          >
-            🌸 지하 2층
-          </button>
+        {/* 층수 선택 - Y, G, V, P 버튼 */}
+        <div className="mb-6">
+          {/* 지하 1층 표시 */}
+          <div className="text-center font-bold text-lg mb-2">지하 1층</div>
+          <div className="flex justify-center gap-4 mb-4">
+            <button
+              className={`w-20 h-20 rounded-xl text-2xl font-bold shadow-md ${floor === 'Y' ? 'bg-yellow-300 text-yellow-800 ring-4 ring-yellow-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setFloor('Y')}
+            >
+              Y
+            </button>
+            <button
+              className={`w-20 h-20 rounded-xl text-2xl font-bold shadow-md ${floor === 'G' ? 'bg-green-300 text-green-800 ring-4 ring-green-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setFloor('G')}
+            >
+              G
+            </button>
+          </div>
+          
+          {/* 지하 2층 표시 */}
+          <div className="text-center font-bold text-lg mb-2">지하 2층</div>
+          <div className="flex justify-center gap-4">
+            <button
+              className={`w-20 h-20 rounded-xl text-2xl font-bold shadow-md ${floor === 'V' ? 'bg-violet-300 text-violet-800 ring-4 ring-violet-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setFloor('V')}
+            >
+              V
+            </button>
+            <button
+              className={`w-20 h-20 rounded-xl text-2xl font-bold shadow-md ${floor === 'P' ? 'bg-pink-300 text-pink-800 ring-4 ring-pink-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setFloor('P')}
+            >
+              P
+            </button>
+          </div>
         </div>
         
         {/* 숫자 표시 */}

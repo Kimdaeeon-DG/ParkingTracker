@@ -30,9 +30,14 @@ export default function Home() {
     const g80Record = findLatestCarRecord('G80');
     if (!g80Record) return 'border-gray-300';
     
-    return g80Record.floor === 'B1' 
-      ? 'border-8 border-green-500' 
-      : 'border-8 border-pink-500';
+    // 층 코드에 따른 테두리 색상 지정
+    switch (g80Record.floor) {
+      case 'Y': return 'border-8 border-yellow-500';
+      case 'G': return 'border-8 border-green-500';
+      case 'V': return 'border-8 border-violet-500';
+      case 'P': return 'border-8 border-pink-500';
+      default: return 'border-gray-300';
+    }
   };
   
   // G90 테두리 색상 결정 함수
@@ -40,9 +45,14 @@ export default function Home() {
     const g90Record = findLatestCarRecord('G90');
     if (!g90Record) return 'border-gray-300';
     
-    return g90Record.floor === 'B1' 
-      ? 'border-8 border-green-500' 
-      : 'border-8 border-pink-500';
+    // 층 코드에 따른 테두리 색상 지정
+    switch (g90Record.floor) {
+      case 'Y': return 'border-8 border-yellow-500';
+      case 'G': return 'border-8 border-green-500';
+      case 'V': return 'border-8 border-violet-500';
+      case 'P': return 'border-8 border-pink-500';
+      default: return 'border-gray-300';
+    }
   };
   
   // G80 층수 텍스트 가져오기
@@ -50,7 +60,10 @@ export default function Home() {
     const g80Record = findLatestCarRecord('G80');
     if (!g80Record) return '위치 정보 없음';
     
-    return g80Record.floor === 'B1' ? '지하 1층' : '지하 2층';
+    // 층 정보 표시 방식 변경
+    if (g80Record.floor === 'Y' || g80Record.floor === 'G') return '지하 1층';
+    if (g80Record.floor === 'V' || g80Record.floor === 'P') return '지하 2층';
+    return '위치 정보 없음';
   };
   
   // G80 번호 가져오기
@@ -58,7 +71,7 @@ export default function Home() {
     const g80Record = findLatestCarRecord('G80');
     if (!g80Record) return '';
     
-    return `${g80Record.number}`;
+    return `${g80Record.floor}${g80Record.number}`;
   };
   
   // G90 층수 텍스트 가져오기
@@ -66,7 +79,10 @@ export default function Home() {
     const g90Record = findLatestCarRecord('G90');
     if (!g90Record) return '위치 정보 없음';
     
-    return g90Record.floor === 'B1' ? '지하 1층' : '지하 2층';
+    // 층 정보 표시 방식 변경
+    if (g90Record.floor === 'Y' || g90Record.floor === 'G') return '지하 1층';
+    if (g90Record.floor === 'V' || g90Record.floor === 'P') return '지하 2층';
+    return '위치 정보 없음';
   };
   
   // G90 번호 가져오기
@@ -74,7 +90,7 @@ export default function Home() {
     const g90Record = findLatestCarRecord('G90');
     if (!g90Record) return '';
     
-    return `${g90Record.number}`;
+    return `${g90Record.floor}${g90Record.number}`;
   };
   
   // 이전 함수들 - 호환성을 위해 유지
@@ -82,12 +98,15 @@ export default function Home() {
     const g80Record = findLatestCarRecord('G80');
     if (!g80Record) return <div className="text-center mt-2 text-gray-500">위치 정보 없음</div>;
     
+    // 층 표시 방식 변경
+    let floorText = '';
+    if (g80Record.floor === 'Y' || g80Record.floor === 'G') floorText = '지하 1층';
+    else if (g80Record.floor === 'V' || g80Record.floor === 'P') floorText = '지하 2층';
+    
     return (
       <div className="text-center mt-2">
-        <p className="font-bold text-xl">
-          {g80Record.floor === 'B1' ? '지하 1층' : '지하 2층'}
-        </p>
-        <p className="text-3xl font-black">{g80Record.number}번</p>
+        <p className="font-bold text-xl">{floorText}</p>
+        <p className="text-3xl font-black">{g80Record.floor}{g80Record.number}</p>
       </div>
     );
   };
@@ -96,12 +115,15 @@ export default function Home() {
     const g90Record = findLatestCarRecord('G90');
     if (!g90Record) return <div className="text-center mt-2 text-gray-500">위치 정보 없음</div>;
     
+    // 층 표시 방식 변경
+    let floorText = '';
+    if (g90Record.floor === 'Y' || g90Record.floor === 'G') floorText = '지하 1층';
+    else if (g90Record.floor === 'V' || g90Record.floor === 'P') floorText = '지하 2층';
+    
     return (
       <div className="text-center mt-2">
-        <p className="font-bold text-xl">
-          {g90Record.floor === 'B1' ? '지하 1층' : '지하 2층'}
-        </p>
-        <p className="text-3xl font-black">{g90Record.number}번</p>
+        <p className="font-bold text-xl">{floorText}</p>
+        <p className="text-3xl font-black">{g90Record.floor}{g90Record.number}</p>
       </div>
     );
   };
@@ -117,7 +139,7 @@ export default function Home() {
         setRecords(fetched);
         setCurrentRecord(fetched[0] || {
           id: 'default',
-          floor: 'B1',
+          floor: 'G',
           number: '00',
           created_at: new Date().toISOString(),
         });
@@ -153,7 +175,7 @@ export default function Home() {
       const carRecords = await fetchRecordsByCarType(car);
       setCurrentRecord(carRecords[0] || {
         id: 'default',
-        floor: 'B1',
+        floor: 'G',
         number: '00',
         created_at: new Date().toISOString(),
         car
