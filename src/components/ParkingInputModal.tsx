@@ -67,18 +67,18 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
         
         {/* 층수 선택 - Y, G, V, P 버튼 */}
         <div className="mb-6 flex justify-center gap-4">
-          {/* 지하 1층과 지하 2층 가로 배치 */}
+          {/* 지하 1층과 지하 2층 가로 배치 - 크기 축소 */}
           <div className="flex flex-col items-center">
-            <div className="font-bold text-lg mb-2">지하 1층</div>
+            <div className="font-bold text-base mb-1">지하 1층</div>
             <div className="flex gap-2">
               <button
-                className={`w-16 h-16 rounded-xl text-2xl font-bold shadow-md ${floor === 'Y' ? 'bg-yellow-300 text-yellow-800 ring-4 ring-yellow-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+                className={`w-14 h-14 rounded-lg text-xl font-bold shadow-md ${floor === 'Y' ? 'bg-yellow-300 text-yellow-800 ring-2 ring-yellow-500' : 'bg-gray-100 hover:bg-gray-200'}`}
                 onClick={() => setFloor('Y')}
               >
                 Y
               </button>
               <button
-                className={`w-16 h-16 rounded-xl text-2xl font-bold shadow-md ${floor === 'G' ? 'bg-green-300 text-green-800 ring-4 ring-green-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+                className={`w-14 h-14 rounded-lg text-xl font-bold shadow-md ${floor === 'G' ? 'bg-green-300 text-green-800 ring-2 ring-green-500' : 'bg-gray-100 hover:bg-gray-200'}`}
                 onClick={() => setFloor('G')}
               >
                 G
@@ -87,16 +87,16 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
           </div>
           
           <div className="flex flex-col items-center">
-            <div className="font-bold text-lg mb-2">지하 2층</div>
+            <div className="font-bold text-base mb-1">지하 2층</div>
             <div className="flex gap-2">
               <button
-                className={`w-16 h-16 rounded-xl text-2xl font-bold shadow-md ${floor === 'V' ? 'bg-violet-300 text-violet-800 ring-4 ring-violet-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+                className={`w-14 h-14 rounded-lg text-xl font-bold shadow-md ${floor === 'V' ? 'bg-violet-300 text-violet-800 ring-2 ring-violet-500' : 'bg-gray-100 hover:bg-gray-200'}`}
                 onClick={() => setFloor('V')}
               >
                 V
               </button>
               <button
-                className={`w-16 h-16 rounded-xl text-2xl font-bold shadow-md ${floor === 'P' ? 'bg-pink-300 text-pink-800 ring-4 ring-pink-500' : 'bg-gray-100 hover:bg-gray-200'}`}
+                className={`w-14 h-14 rounded-lg text-xl font-bold shadow-md ${floor === 'P' ? 'bg-pink-300 text-pink-800 ring-2 ring-pink-500' : 'bg-gray-100 hover:bg-gray-200'}`}
                 onClick={() => setFloor('P')}
               >
                 P
@@ -105,52 +105,52 @@ const ParkingInputModal: React.FC<ParkingInputModalProps> = ({
           </div>
         </div>
         
-        {/* 숫자 표시 */}
-        <div className="mb-6 p-4 text-center bg-white rounded-lg shadow-inner">
-          <span className="text-4xl font-bold">{number || '번호 입력'}</span>
+        {/* 숫자 표시 - 크기 축소 */}
+        <div className="mb-3 p-2 text-center bg-white rounded-lg shadow-inner">
+          <span className="text-3xl font-bold">{number || '번호'}</span>
         </div>
         
-        {/* 숫자 키패드 */}
-        <div className="grid grid-cols-3 gap-2 mb-6">
+        {/* 숫자 키패드 - 크기 축소 */}
+        <div className="grid grid-cols-3 gap-1 mb-3">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
             <button
               key={num}
-              className="p-4 text-xl font-bold bg-white rounded-lg shadow"
+              className="p-3 text-lg font-bold bg-white rounded-lg shadow"
               onClick={() => handleNumberInput(num.toString())}
             >
               {num}
             </button>
           ))}
           <button
-            className="p-4 text-xl font-bold bg-white rounded-lg shadow"
+            className="p-3 text-lg font-bold bg-white rounded-lg shadow"
             onClick={handleClear}
           >
             C
           </button>
           <button
-            className="p-4 text-xl font-bold bg-white rounded-lg shadow"
+            className="p-3 text-lg font-bold bg-white rounded-lg shadow"
             onClick={() => handleNumberInput('0')}
           >
             0
           </button>
           <button
-            className="p-4 text-xl font-bold bg-white rounded-lg shadow"
+            className="p-3 text-lg font-bold bg-white rounded-lg shadow"
             onClick={handleBackspace}
           >
             ⌫
           </button>
         </div>
         
-        {/* 버튼 */}
+        {/* 버튼 - 크기 축소 */}
         <div className="flex justify-between">
           <button
-            className="px-6 py-2 bg-gray-300 rounded-lg"
+            className="px-5 py-2 bg-gray-300 rounded-lg text-sm font-bold"
             onClick={onClose}
           >
             취소
           </button>
           <button
-            className="px-6 py-2 text-white bg-blue-500 rounded-lg"
+            className="px-5 py-2 bg-blue-500 text-white rounded-lg text-sm font-bold"
             onClick={handleSave}
             disabled={!number}
           >
